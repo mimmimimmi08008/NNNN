@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>暻白淨白保養諮詢中心 D&N Beauty Spa</title>
+    <!-- 引入 Google Fonts 以提升字體質感 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #89CFF0; /* 寶寶藍主色 */
+            --light-blue: #E0F7FA;
+            --soft-blue: #B3E5FC;
+            --dark-blue: #2C3E50;
+            --text-main: #34495E;
+            --text-light: #7F8C8D;
+            --bg-white: #FFFFFF;
+            --price-blue: #1565C0; /* 新增：高對比的清晰價格藍色 */
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+            color: var(--text-main);
+            /* 寶寶藍漸層背景 */
+            background: linear-gradient(135deg, #F0F8FF 0%, #E1F5FE 50%, #B3E5FC 100%);
+            background-attachment: fixed;
+            line-height: 1.8;
+            letter-spacing: 0.05em;
+        }
+
+        /* 防止中文字不自然斷行 */
+        p, h1, h2, h3, li, span, div {
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+
+        /* 頂部標題區 */
+        header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            background: transparent;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--dark-blue);
+            margin: 0 0 5px 0;
+        }
+
+        header p {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin: 0;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        /* 固定導航列 (Sticky Tabs) */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            /* 毛玻璃效果 */
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: space-between;
+            box-shadow: 0 4px 15px rgba(137, 207, 240, 0.15);
+            padding: 0 10px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 16px 5px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--dark-blue);
+            font-weight: 700;
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            width: 60%;
+            height: 3px;
+            background-color: var(--primary-blue);
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* 內容區塊 */
+        .main-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 25px 20px;
+            /* 增加底部空間：避免內容被手機底部邊界或手勢操作區阻擋 */
+            padding-bottom: 25vh; 
+        }
+
+        .tab-content {
+            display: none;
+            background: var(--bg-white);
+            border-radius: 20px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 30px rgba(179, 229, 252, 0.4);
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--dark-blue);
+            margin-top: 0;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-title::before,
+        .section-title::after {
+            content: '✦';
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+            margin: 0 10px;
+        }
+
+        /* 價目表樣式 */
+        .price-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .price-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px dashed var(--soft-blue);
+        }
+
+        .price-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-name {
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .service-price {
+            font-weight: 700;
+            color: var(--price-blue);
+        }
+
+        /* 條列與清單樣式 */
+        .notice-list {
+            padding-left: 20px;
+            color: var(--text-main);
+        }
+
+        .notice-list li {
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .notice-list li::marker {
+            color: var(--primary-blue);
+        }
+
+        /* 方案卡片樣式 */
+        .plan-card {
+            background: var(--light-blue);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary-blue);
+        }
+
+        .plan-card h4 {
+            margin: 0 0 8px 0;
+            color: var(--dark-blue);
+            font-size: 1.05rem;
+        }
+
+        .plan-card p {
+            margin: 0;
+            font-size: 0.95rem;
+        }
+
+        /* 聯絡資訊與按鈕 */
+        .contact-info {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .contact-text {
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
+
+        .btn-line {
+            display: inline-block;
+            background-color: #00B900; /* LINE 官方綠色 */
+            color: white;
+            text-decoration: none;
+            padding: 14px 36px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin: 25px 0;
+            box-shadow: 0 4px 15px rgba(0, 185, 0, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .btn-line:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 頂部標題區 -->
+    <header>
+        <h1>暻白淨白保養諮詢中心</h1>
+        <p>D&N Beauty Spa</p>
+    </header>
+
+    <!-- 固定導航列 (Sticky Tabs) -->
+    <nav class="sticky-nav" id="stickyNav" style="overflow-x: auto; white-space: nowrap;">
+        <button class="tab-btn active" onclick="switchTab(event, 'priceTab')">價目表</button>
+        <button class="tab-btn" onclick="switchTab(event, 'noticeTab')">預約須知</button>
+        <button class="tab-btn" onclick="switchTab(event, 'planTab')">淨白方案</button>
+        <button class="tab-btn" onclick="switchTab(event, 'contactTab')">預約方式</button>
+    </nav>
+
+    <!-- 內容區塊 -->
+    <main class="main-container">
+        
+        <!-- 價目表 -->
+        <section id="priceTab" class="tab-content active">
+            <h2 class="section-title">服務價目表</h2>
+            
+            <!-- 主打體驗方案 -->
+            <div class="plan-card" style="border-left-color: #FF7EB3; background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E1 100%); margin-bottom: 25px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <h4 style="color: #D81B60; font-size: 1.15rem; margin-bottom: 5px;">✨ 紅藍雙光波淨白保養</h4>
+                    <span style="background: #D81B60; color: white; font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: bold;">新客限定</span>
+                </div>
+                <p style="font-size: 0.9rem; color: #555; margin-bottom: 8px;">⏱️ 60分鐘 (含潔牙 ＆ 照光時間)</p>
+                <p style="font-size: 0.95rem; color: #D81B60; font-weight: bold; margin-bottom: 15px;">🎁 贈潔牙教學 (價值 NT$ 2,000)</p>
+                
+                <div style="text-align: right; border-top: 1px dashed #FFB6C1; padding-top: 10px;">
+                    <span style="font-size: 0.85rem; text-decoration: line-through; color: #999; margin-right: 10px;">原價 NT$ 8,000</span>
+                    <span style="font-size: 0.9rem; color: var(--text-main);">體驗價 </span>
+                    <span style="font-weight: bold; color: #D81B60; font-size: 1.4rem;">NT$ 3,888</span>
+                </div>
+            </div>
+
+            <!-- 居家組清單 -->
+            <div class="plan-card" style="border-left-color: #4FC3F7; background: linear-gradient(135deg, #E1F5FE 0%, #FFFFFF 100%); margin-bottom: 15px; padding-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <h4 style="color: var(--dark-blue); font-size: 1.15rem; margin-bottom: 5px;">🏠 專業居家護理組</h4>
+                    <span style="background: var(--primary-blue); color: white; font-size: 0.75rem; padding: 3px 8px; border-radius: 12px; font-weight: bold;">超值組合</span>
+                </div>
+                <p style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 10px;">✅ 包含下方所有全套居家護理物品</p>
+                
+                <div style="text-align: right; border-top: 1px dashed var(--soft-blue); padding-top: 10px; margin-bottom: 15px;">
+                    <span style="font-size: 0.85rem; text-decoration: line-through; color: #999; margin-right: 10px;">原價 NT$ 12,800</span>
+                    <span style="font-size: 0.9rem; color: var(--text-main);">組合價 </span>
+                    <span style="font-weight: bold; color: var(--price-blue); font-size: 1.4rem;">NT$ 7,500</span>
+                </div>
+
+                <ul class="price-list" style="background: rgba(255,255,255,0.5); padding: 15px; border-radius: 8px;">
+                    <li class="price-item" style="padding: 8px 0;">
+                        <span class="service-name" style="font-size: 0.9rem;">抗敏精華 * 2</span>
+                        <span class="service-price" style="font-size: 0.9rem;">單購 NT$ 400</span>
+                    </li>
+                    <li class="price-item" style="padding: 8px 0;">
+                        <span class="service-name" style="font-size: 0.9rem;">美白筆 * 3</span>
+                        <span class="service-price" style="font-size: 0.9rem;">單購 NT$ 4,500</span>
+                    </li>
+                    <li class="price-item" style="padding: 8px 0;">
+                        <span class="service-name" style="font-size: 0.9rem;">美白燈</span>
+                        <span class="service-price" style="font-size: 0.9rem;">單購 NT$ 6,000</span>
+                    </li>
+                    <li class="price-item" style="padding: 8px 0;">
+                        <span class="service-name" style="font-size: 0.9rem;">張口器</span>
+                        <span class="service-price" style="font-size: 0.9rem;">單購 NT$ 780</span>
+                    </li>
+                    <li class="price-item" style="padding: 8px 0;">
+                        <span class="service-name" style="font-size: 0.9rem;">滾輪牙刷</span>
+                        <span class="service-price" style="font-size: 0.9rem;">單購 NT$ 350</span>
+                    </li>
+                    <li class="price-item" style="padding: 8px 0; border-bottom: none;">
+                        <span class="service-name" style="font-size: 0.9rem;">電動沖牙機</span>
+                        <span class="service-price" style="font-size: 0.9rem;">單購 NT$ 699</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 預約須知 -->
+        <section id="noticeTab" class="tab-content">
+            <h2 class="section-title">預約前請閱讀</h2>
+            
+            <div style="color: var(--text-main); line-height: 1.8; font-size: 0.95rem;">
+                <p style="font-size: 1.05rem; font-weight: 500; color: var(--dark-blue); margin-bottom: 5px;">親愛的貴賓您好 💕</p>
+                <p style="margin-top: 0;">歡迎預約美齒淨白保養～<br>近三日的預約時間變化多，建議盡早向我們預約保留時段喔！</p>
+
+                <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed var(--soft-blue);">
+                    <h4 style="color: var(--dark-blue); margin-top: 0; margin-bottom: 5px;">💎 本店營業時間</h4>
+                    <p style="font-weight: bold; color: var(--text-main); margin: 5px 0;">週一到週日 ⭐⭐⭐⭐⭐ 採預約制</p>
+                    <p style="color: var(--price-blue); font-weight: 700; margin: 0; font-size: 1.05rem;">早上 09：00 ～ 晚上 20：30</p>
+                </div>
+
+                <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed var(--soft-blue);">
+                    <h4 style="color: var(--dark-blue); margin-top: 0; margin-bottom: 8px;">💎 為了維護您的權益</h4>
+                    <p style="margin-bottom: 10px; margin-top: 5px; color: var(--text-main);"><strong>&lt; 第一次 &gt;</strong> 淨白保養需要完整地評估與說明，大約需<strong>〔 1.5 個小時 〕</strong>喔 💕</p>
+                    <p style="margin: 0; color: var(--text-main); font-size: 0.95rem; font-weight: 500;">之後回來保養的話，就會比較省時～～<br>約 <strong style="color: #E53935; font-size: 1.05rem;">45 分鐘</strong> 就 ok 了 😁</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 淨白方案 -->
+        <section id="planTab" class="tab-content">
+            <h2 class="section-title">專屬淨白方案</h2>
+            
+            <div class="plan-card">
+                <h4>✨ 1堂【初白喚醒】</h4>
+                <p>喚醒齒面亮澤</p>
+                <div style="margin-top: 10px; font-weight: bold; color: var(--price-blue); font-size: 1.1em;">NT$ 6,000</div>
+            </div>
+            
+            <div class="plan-card">
+                <h4>✨ 3堂【初光淨白】</h4>
+                <p>基礎亮白計畫 <span style="color: #e74c3c; font-weight: bold; font-size: 0.85em; background: #fdf2f2; padding: 2px 8px; border-radius: 12px; margin-left: 5px;">🎁 限時加碼送 1 堂</span></p>
+                <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: bold; color: var(--price-blue); font-size: 1.1em;">NT$ 16,800</span>
+                    <span style="font-size: 0.85rem; color: var(--text-light);">均價 NT$ 4,200 / 堂</span>
+                </div>
+            </div>
+
+            <div class="plan-card">
+                <h4>✨ 6堂【潤白光澤】</h4>
+                <p>持續養白進階 <span style="color: #e74c3c; font-weight: bold; font-size: 0.85em; background: #fdf2f2; padding: 2px 8px; border-radius: 12px; margin-left: 5px;">🎁 限時加碼送 2 堂</span></p>
+                <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: bold; color: var(--price-blue); font-size: 1.1em;">NT$ 30,000</span>
+                    <span style="font-size: 0.85rem; color: var(--text-light);">均價 NT$ 3,750 / 堂</span>
+                </div>
+            </div>
+
+            <div class="plan-card">
+                <h4>✨ 10堂【晶透永恆】</h4>
+                <p>白金逆齡淨白 <span style="color: #e74c3c; font-weight: bold; font-size: 0.85em; background: #fdf2f2; padding: 2px 8px; border-radius: 12px; margin-left: 5px;">🎁 限時加碼送 5 堂</span></p>
+                <div style="margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-weight: bold; color: var(--price-blue); font-size: 1.1em;">NT$ 39,800</span>
+                    <span style="font-size: 0.85rem; color: var(--text-light);">均價 NT$ 2,653 / 堂</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 預約方式 -->
+        <section id="contactTab" class="tab-content">
+            <h2 class="section-title">聯絡與預約</h2>
+            <div class="contact-info">
+                <p class="contact-text">歡迎透過官方 LINE 進行預約與一對一線上諮詢，我們將盡快為您安排專屬時段。</p>
+                
+                <a href="https://lin.ee/aLl1WMl" target="_blank" class="btn-line">點擊加入 LINE 官方帳號預約</a>
+                
+                <div style="margin-top: 10px;">
+                    <p class="contact-text"><strong>聯絡專線：</strong>0976662068</p>
+                    <p class="contact-text"><strong>中心地址：</strong>407台灣臺中市西屯區逢大路78號</p>
+                    <p class="contact-text" style="color: var(--price-blue); font-weight: bold; font-size: 0.9rem; margin-top: 15px;">
+                        營業時間：週一至週日 09:00 - 20:30 (採預約制)
+                    </p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // 切換分頁邏輯
+        function switchTab(event, tabId) {
+            // 隱藏所有內容
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // 移除所有按鈕的 active 狀態
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 顯示選擇的內容並將按鈕設為 active
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // 稍微滾動讓標題剛好貼齊選單下方，提升使用者體驗
+            const navHeight = document.getElementById('stickyNav').offsetHeight;
+            window.scrollTo({
+                top: 0, 
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
